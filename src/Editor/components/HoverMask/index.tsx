@@ -29,6 +29,11 @@ function HoverMask({
     updatePosition()
   }, [componentId])
 
+  // 解决 delete 组件后会触发它父组件的 hover，但这时候高亮框的高度是没删除元素的高度，会多出一块的问题
+  useEffect(() => {
+    updatePosition()
+  }, [components])
+
   function updatePosition() {
     if (!componentId) return
 
@@ -74,7 +79,7 @@ function HoverMask({
           position: 'absolute',
           left: position.left,
           top: position.top,
-          backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          backgroundColor: 'rgba(0, 0, 255, 0.05)',
           border: '1px dashed blue',
           // 除了指示该元素不是鼠标事件的目标之外，值none表示鼠标事件“穿透”该元素并且指定该元素“下面”的任何东西。
           pointerEvents: 'none',
@@ -106,7 +111,7 @@ function HoverMask({
             whiteSpace: 'nowrap',
           }}
         >
-          {curComponent?.name}
+          {curComponent?.desc}
         </div>
       </div>
     </>,

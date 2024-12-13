@@ -4,6 +4,7 @@ export interface Component {
   id: number
   name: string
   props: any
+  desc: string
   children?: Component[]
   parentId?: number
 }
@@ -11,12 +12,15 @@ export interface Component {
 // 使用 children 属性连接起来的树形结构
 interface State {
   components: Component[]
+  curComponentId?: number | null
+  curComponent: Component | null
 }
 
 interface Action {
   addComponent: (component: Component, parentId?: number) => void
   deleteComponent: (componentId: number) => void
   updateComponentProps: (componentId: number, props: any) => void
+  setCurComponentId: (componentId: number | null) => void
 }
 
 export const useComponentsStore = create<State & Action>((set, get) => ({
@@ -28,6 +32,14 @@ export const useComponentsStore = create<State & Action>((set, get) => ({
       desc: '页面',
     },
   ],
+  curComponentId: null,
+  curComponent: null,
+  setCurComponentId(componentId) {
+    set((state) => ({
+      curComponentId: componentId,
+      curComponent: getComponentById(componentId, state.components),
+    }))
+  },
   // 新增传入 parentId，在这个节点下新增
   addComponent(component, parentId) {
     set((state) => {
