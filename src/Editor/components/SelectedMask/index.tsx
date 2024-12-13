@@ -33,7 +33,10 @@ function SelectedMask({
 
   // 解决 click 选中的组件再添加组件的时候编辑框高度不会变化的问题
   useEffect(() => {
-    updatePosition()
+    // 修改 css 的时候选中框的大小不会改变，需要增加延迟，这是因为 components 变了，但是到渲染完成，再 getBoundingClientRect 拿到改变之后的宽高是有一段时间的
+    setTimeout(() => {
+      updatePosition()
+    }, 200)
   }, [components])
 
   useEffect(() => {
