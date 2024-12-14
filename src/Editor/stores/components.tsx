@@ -14,6 +14,7 @@ export interface Component {
 // 使用 children 属性连接起来的树形结构
 interface State {
   components: Component[]
+  mode: 'edit' | 'preview'
   curComponentId?: number | null
   curComponent: Component | null
 }
@@ -28,6 +29,7 @@ interface Action {
     replace?: boolean
   ) => void
   setCurComponentId: (componentId: number | null) => void
+  setMode: (mode: State['mode']) => void
 }
 
 export const useComponentsStore = create<State & Action>((set, get) => ({
@@ -41,6 +43,10 @@ export const useComponentsStore = create<State & Action>((set, get) => ({
   ],
   curComponentId: null,
   curComponent: null,
+  mode: 'edit',
+  setMode(mode) {
+    set({ mode })
+  },
   setCurComponentId(componentId) {
     set((state) => ({
       curComponentId: componentId,

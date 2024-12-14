@@ -1,7 +1,7 @@
 import { useMaterialDrop } from '../../hooks/useMaterialDrop'
 import type { CommonComponentProps } from '../../interface'
 
-function Page({ id, name, children, styles }: CommonComponentProps) {
+function Page({ id, children, styles }: CommonComponentProps) {
   const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id)
 
   return (
