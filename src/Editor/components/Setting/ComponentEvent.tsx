@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { Button, Collapse } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useComponentConfigStore } from '../../stores/component-config'
-import { useComponentsStore } from '../../stores/components'
+import { getComponentById, useComponentsStore } from '../../stores/components'
 import { ActionModal } from './ActionModal'
 import type { CollapseProps } from 'antd'
 import type { ComponentEvent } from '../../stores/component-config'
 import type { ActionConfig } from './ActionModal'
 
 export function ComponentEvent() {
-  const { curComponent, updateComponentProps } = useComponentsStore()
+  const { components, curComponent, updateComponentProps } =
+    useComponentsStore()
   const { componentConfig } = useComponentConfigStore()
   // 记录当前的 event 配置
   const [actionModalOpen, setActionModalOpen] = useState(false)
@@ -132,6 +133,41 @@ export function ComponentEvent() {
                   {item.type === 'customJS' ? (
                     <div className="border border-[#aaa] m-[10px] p-[10px] relative">
                       <div className="text-[blue]">自定义 JS</div>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 30,
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => editAction(item, index)}
+                      >
+                        <EditOutlined />
+                      </div>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 10,
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => deleteAction(event, index)}
+                      >
+                        <DeleteOutlined />
+                      </div>
+                    </div>
+                  ) : null}
+                  {item.type === 'componentMethod' ? (
+                    <div className="border border-[#aaa] m-[10px] p-[10px] relative">
+                      <div className="text-[blue]">组件方法</div>
+                      <div>
+                        {
+                          getComponentById(item.config.componentId, components)
+                            ?.desc
+                        }
+                      </div>
+                      <div>{item.config.componentId}</div>
+                      <div>{item.config.method}</div>
                       <div
                         style={{
                           position: 'absolute',
